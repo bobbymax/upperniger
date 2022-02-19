@@ -162,6 +162,17 @@ const Sidebar = ({ toggle, navigation, auth = undefined, isAdmin = false }) => {
                         <span>Settings</span>
                       </Link>
                     </li>
+                    <li className="dropdown">
+                      <Link
+                        className={`nav-link menu-title ${
+                          location.pathname === "/configuration" && "active"
+                        }`}
+                        to="/configuration"
+                      >
+                        <Icon.Settings />
+                        <span>Configuration</span>
+                      </Link>
+                    </li>
                   </>
                 )}
               </ul>

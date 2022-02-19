@@ -1,5 +1,5 @@
 export const API_ENDPOINTS = {
-    url: 'https://upperniger.test/api/',
+    url: 'https://orbit.test/api/',
     cloudinary: 'https://api.cloudinary.com/v1_1/sledge-consulting-limited/image/upload'
 }
 

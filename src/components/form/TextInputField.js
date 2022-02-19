@@ -12,6 +12,7 @@ const TextInputField = ({
   errorMessage = null,
   additionalClasses = "",
   disabled = false,
+  name = "",
 }) => {
   return (
     <div className="form-group">
@@ -25,6 +26,7 @@ const TextInputField = ({
           onChange={onChange}
           required={required}
           disabled={disabled}
+          name={name}
         />
       ) : (
         <textarea
@@ -34,6 +36,7 @@ const TextInputField = ({
           onChange={onChange}
           placeholder={placeholder}
           value={value}
+          name={name}
         ></textarea>
       )}
     </div>

@@ -8,6 +8,7 @@ const CustomSelect = ({
   error = false,
   errorMessage = null,
   additionalClasses = "",
+  name = "",
 }) => {
   return (
     <>
@@ -17,6 +18,7 @@ const CustomSelect = ({
           className="form-select btn-square digits"
           value={value}
           onChange={onChange}
+          name={name}
         >
           {children}
         </select>
