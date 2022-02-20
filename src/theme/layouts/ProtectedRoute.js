@@ -1,9 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Navigate } from "react-router-dom";
 import Footer from "../../components/theme/Footer";
 import Header from "../../components/theme/Header";
 import Sidebar from "../../components/theme/Sidebar";
+import { fetchSiteConfig } from "../../features/configuration/configurationSlice";
 import { canAccessModule } from "../../utils/helpers/functions/access";
 import { collectAll } from "../../utils/helpers/functions/controllers";
 import useApi from "../../utils/hooks/useApi";
@@ -11,6 +13,7 @@ import { useUser } from "../../utils/hooks/useUser";
 
 const ProtectedRoute = ({ children }) => {
   const auth = useUser();
+  const dispatch = useDispatch();
   const { data: modules, request: fetch } = useApi(collectAll);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -23,6 +26,17 @@ const ProtectedRoute = ({ children }) => {
   useEffect(() => {
     if (auth !== null) {
       fetch("modules");
+    }
+  }, [auth]);
+
+  useEffect(() => {
+    if (auth !== null) {
+      collectAll("settings")
+        .then((res) => {
+          const data = res.data;
+          dispatch(fetchSiteConfig(data));
+        })
+        .catch((err) => console.log(err.message));
     }
   }, [auth]);
 

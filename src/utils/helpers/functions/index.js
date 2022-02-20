@@ -13,3 +13,15 @@ export const search = (str = "", data = []) => {
 
   return filtered;
 };
+
+export const formatConfig = (arr) => {
+  const obt = {};
+
+  if (arr.length > 0) {
+    arr.forEach((el) => {
+      obt[el.key] = el.value;
+    });
+  }
+
+  return obt;
+};

@@ -6,11 +6,15 @@ import CustomCardBody from "../../components/theme/commons/cards/CustomCardBody"
 import TextInputField from "../../components/form/TextInputField";
 import CustomSelect from "../../components/form/CustomSelect";
 import CustomSelectOptions from "../../components/form/CustomSelectOptions";
+import { useDispatch } from "react-redux";
+import { fetchSiteConfig } from "../../features/configuration/configurationSlice";
 
 const Config = () => {
   const [state, setState] = useState({});
   const [settings, setSettings] = useState([]);
   const [open, setOpen] = useState(false);
+
+  const dispatch = useDispatch();
 
   const handleDrawer = () => {
     setOpen(!open);
@@ -50,7 +54,8 @@ const Config = () => {
 
     store("portal/configuration", data)
       .then((res) => {
-        console.log(res.data);
+        const data = res.data;
+        dispatch(fetchSiteConfig(data));
       })
       .catch((err) => console.log(err.message));
   };
@@ -72,7 +77,6 @@ const Config = () => {
       console.log(error);
     }
   }, []);
-  console.log(state);
 
   return (
     <>
@@ -87,7 +91,7 @@ const Config = () => {
                   <div className="col-md-12">
                     {settings.length > 0 &&
                       settings.map((conf, i) => (
-                        <div className="col-md-12 mb-2" key={i}>
+                        <div className="col-md-12" key={i}>
                           {conf.input_type === "text" && (
                             <TextInputField
                               label={conf.display_name}

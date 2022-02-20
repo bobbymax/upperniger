@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import React, { useState } from "react";
 import AvatarCard from "./commons/AvatarCard";
 import * as Icon from "react-feather";
@@ -62,7 +63,9 @@ const Sidebar = ({ toggle, navigation, auth = undefined, isAdmin = false }) => {
                             <>
                               <Link
                                 className={`nav-link menu-title ${
-                                  location.pathname === nav.path && "active"
+                                  (location.pathname === nav.path ||
+                                    (isToggled && active == nav.id)) &&
+                                  "active"
                                 }`}
                                 to="#"
                                 onClick={() => handleMenu(nav.id)}
