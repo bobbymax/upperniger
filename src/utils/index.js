@@ -1,20 +1,15 @@
 export const API_ENDPOINTS = {
   url: "https://orbit.test/api/",
-  cloudinary:
-    "https://api.cloudinary.com/v1_1/sledge-consulting-limited/image/upload",
-};
-
-export const aws = {
-  // key: 'AKIAU2Y6NTCDYZJZDZUS',
-  // secret: '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'
+  //   cloudinary:
+  //     "https://api.cloudinary.com/v1_1/sledge-consulting-limited/image/upload",
 };
 
 export const config = {
-  bucketName: "orbitbucket",
-  albumName: "files",
-  region: "eu-west-3",
-  accessKeyId: aws.key,
-  secretAccessKey: aws.secret,
+  bucketName: process.env.REACT_APP_AWS_BUCKET,
+  albumName: process.env.REACT_APP_AWS_ALBUM,
+  region: process.env.REACT_APP_AWS_REGION,
+  accessKeyId: process.env.REACT_APP_AWS_KEY,
+  secretAccessKey: process.env.REACT_APP_AWS_SECRET,
 };
 
 export const allowedFileTypes = ["jpg", "jpeg", "png", "pdf"];
