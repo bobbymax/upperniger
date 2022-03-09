@@ -30,6 +30,9 @@ const ProjectDetails = lazy(() =>
   import("../views/procurement/ProjectDetails")
 );
 const Projects = lazy(() => import("../views/procurement/Projects"));
+const RequiredDocuments = lazy(() =>
+  import("../views/procurement/RequiredDocuments")
+);
 
 export const pages = {
   authentication: {
@@ -142,6 +145,11 @@ export const pages = {
       name: "Assign Role to Staff",
       component: <AssignRole />,
       path: "/assign/roles",
+    },
+    {
+      name: "Required Documents",
+      component: <RequiredDocuments />,
+      path: "/documents/required",
     },
   ],
   private: [],

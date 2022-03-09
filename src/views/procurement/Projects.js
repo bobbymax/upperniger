@@ -124,7 +124,7 @@ const Projects = () => {
   };
 
   const handleDelete = (id) => {
-    destroy("projects", state.id)
+    destroy("projects", id)
       .then((res) => {
         setProjects(
           projects.filter((project) => project.id !== res.data.data.id)
