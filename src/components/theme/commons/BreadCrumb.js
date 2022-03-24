@@ -9,14 +9,14 @@ const BreadCrumb = ({ pageName, handleDrawer = undefined }) => {
         <div className="row">
           <div className="col-sm-6">
             <h3>{pageName}</h3>
-            <ol className="breadcrumb">
+            {/* <ol className="breadcrumb">
               <li className="breadcrumb-item">
                 <a href="index.html">Home</a>
               </li>
               <li className="breadcrumb-item">Forms </li>
               <li className="breadcrumb-item">Form Controls</li>
               <li className="breadcrumb-item active">Validation Forms</li>
-            </ol>
+            </ol> */}
           </div>
           <div className="col-sm-6">
             {/* Bookmark Start*/}

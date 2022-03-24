@@ -13,6 +13,7 @@ const TableCard = ({
   handleEdit = undefined,
   handleDelete = undefined,
   assignRole = undefined,
+  manageVendor = undefined,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -65,6 +66,7 @@ const TableCard = ({
                 handleDelete={handleDelete}
                 handleEdit={handleEdit}
                 assignRole={assignRole}
+                manageVendor={manageVendor}
               />
               <TableBody>
                 {computed.length > 0 ? (
@@ -73,14 +75,15 @@ const TableCard = ({
                       (currentPage - 1) * itemsPerPage,
                       (currentPage - 1) * itemsPerPage + itemsPerPage
                     )
-                    .map((row) => (
-                      <TableRow key={row.id}>
+                    .map((row, i) => (
+                      <TableRow key={i}>
                         {columns.map((col) => (
                           <td key={col.key}>{row[col.key]}</td>
                         ))}
                         {(handleEdit !== undefined ||
                           handleDelete !== undefined ||
-                          assignRole !== undefined) && (
+                          assignRole !== undefined ||
+                          manageVendor !== undefined) && (
                           <td>
                             {handleEdit !== undefined && (
                               <Icon.Edit2
@@ -100,6 +103,12 @@ const TableCard = ({
                                 onClick={() => assignRole(row)}
                               />
                             )}
+                            {manageVendor !== undefined && (
+                              <Icon.Settings
+                                size={16}
+                                onClick={() => manageVendor(row)}
+                              />
+                            )}
                           </td>
                         )}
                       </TableRow>
@@ -108,7 +117,7 @@ const TableCard = ({
                   <TableRow>
                     <td
                       colSpan={
-                        handleEdit !== undefined
+                        handleEdit !== undefined || manageVendor !== undefined
                           ? columns.length + 1
                           : columns.length
                       }

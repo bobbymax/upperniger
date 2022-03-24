@@ -25,7 +25,12 @@ const Settings = lazy(() => import("../views/configurations/Settings"));
 const Config = lazy(() => import("../views/configurations/Config"));
 
 const Biddings = lazy(() => import("../views/procurement/Biddings"));
+const Bids = lazy(() => import("../views/procurement/Bids"));
+const PlaceBid = lazy(() => import("../views/procurement/PlaceBid"));
+const BidAnalysis = lazy(() => import("../views/procurement/BidAnalysis"));
 const Company = lazy(() => import("../views/procurement/Company"));
+const VendorCheck = lazy(() => import("../views/procurement/VendorCheck"));
+const ManageVendor = lazy(() => import("../views/procurement/ManageVendor"));
 const ProjectDetails = lazy(() =>
   import("../views/procurement/ProjectDetails")
 );
@@ -127,9 +132,34 @@ export const pages = {
       path: "/bidding",
     },
     {
+      name: "Bid Invitations",
+      component: <Bids />,
+      path: "/bid/invitations",
+    },
+    {
+      name: "Place Bids",
+      component: <PlaceBid />,
+      path: "/projects/:id/bid",
+    },
+    {
+      name: "Evaluate Bids",
+      component: <BidAnalysis />,
+      path: "/project/:id/bids",
+    },
+    {
+      name: "Check Vendor",
+      component: <VendorCheck />,
+      path: "/evaluate/:id/company",
+    },
+    {
       name: "Vendors",
       component: <Company />,
       path: "/vendors",
+    },
+    {
+      name: "Manage Vendor",
+      component: <ManageVendor />,
+      path: "/vendors/:id/manage",
     },
     {
       name: "Projects",

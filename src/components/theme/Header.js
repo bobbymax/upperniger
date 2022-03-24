@@ -1,6 +1,5 @@
 import React from "react";
-import logo from "../../assets/new/images/logo/logo.png";
-import logoDark from "../../assets/new/images/logo/dark-logo.png";
+import logoDark from "../../assets/images/project.png";
 import * as Icon from "react-feather";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -19,7 +18,7 @@ const Header = ({ toggle, handleToggle }) => {
           <div className="main-header-left">
             <div className="logo-wrapper">
               <Link to="/">
-                <img className="img-fluid" src={logo} alt="brand logo" />
+                <img className="img-fluid" src={logoDark} alt="brand logo" />
               </Link>
             </div>
             <div className="dark-logo-wrapper">
@@ -36,7 +35,7 @@ const Header = ({ toggle, handleToggle }) => {
           </div>
           <div className="left-menu-header col">
             <ul>
-              <li>
+              {/* <li>
                 <form className="form-inline search-form">
                   <div className="search-bg">
                     <i className="fa fa-search" />
@@ -49,12 +48,12 @@ const Header = ({ toggle, handleToggle }) => {
                 <span className="d-sm-none mobile-search search-bg">
                   <i className="fa fa-search" />
                 </span>
-              </li>
+              </li> */}
             </ul>
           </div>
           <div className="nav-right col pull-right right-menu p-0">
             <ul className="nav-menus">
-              <li className="onhover-dropdown">
+              {/* <li className="onhover-dropdown">
                 <div className="bookmark-box">
                   <Icon.Star />
                 </div>
@@ -169,7 +168,7 @@ const Header = ({ toggle, handleToggle }) => {
                 <div className="mode">
                   <i className="fa fa-moon-o" />
                 </div>
-              </li>
+              </li> */}
               <li className="onhover-dropdown p-0">
                 <button
                   className="btn btn-primary-light"

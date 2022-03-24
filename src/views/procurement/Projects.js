@@ -1,20 +1,28 @@
+/* eslint-disable eqeqeq */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import {
   collectAll,
   alter,
-  destroy,
+  // destroy,
   store,
+  batchRequests,
 } from "../../utils/helpers/functions/controllers";
 import { useUser } from "../../utils/hooks/useUser";
 import BreadCrumb from "../../components/theme/commons/BreadCrumb";
-import TableCard from "../../components/theme/commons/TableCard";
+// import TableCard from "../../components/theme/commons/TableCard";
 import CustomCard from "../../components/theme/commons/cards/CustomCard";
 import CustomCardHeader from "../../components/theme/commons/cards/CustomCardHeader";
 import CustomCardBody from "../../components/theme/commons/cards/CustomCardBody";
 import TextInputField from "../../components/form/TextInputField";
 import CustomSelect from "../../components/form/CustomSelect";
 import CustomSelectOptions from "../../components/form/CustomSelectOptions";
+import ProjectCard from "../../components/projects/ProjectCard";
+import axios from "axios";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
+import Alert from "../../utils/helpers/classes/Alert";
+import { useNavigate } from "react-router-dom";
 
 const Projects = () => {
   const initialState = {
@@ -32,11 +40,14 @@ const Projects = () => {
     budget_year: 2021,
     status: "pending",
     approval_threshold: "",
+    requiredDocuments: [],
   };
   const auth = useUser();
+  const animatedComponents = makeAnimated();
   const [state, setState] = useState(initialState);
   const [projects, setProjects] = useState([]);
   const [serviceCategories, setServiceCategories] = useState([]);
+  const [requiredDocuments, setRequiredDocuments] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [update, setUpdate] = useState(false);
   const [awardReq, setAwardReq] = useState({
@@ -45,6 +56,8 @@ const Projects = () => {
     mobilization: 0,
     payable: 0,
   });
+
+  const navigate = useNavigate();
 
   const handleDrawer = () => {
     setOpenModal(!openModal);
@@ -90,6 +103,7 @@ const Projects = () => {
       budget_year: state.budget_year,
       status: state.status,
       approval_threshold: state.approval_threshold,
+      requiredDocuments: state.requiredDocuments,
     };
 
     if (update) {
@@ -123,36 +137,102 @@ const Projects = () => {
     }
   };
 
-  const handleDelete = (id) => {
-    destroy("projects", id)
-      .then((res) => {
-        setProjects(
-          projects.filter((project) => project.id !== res.data.data.id)
-        );
-        setState(initialState);
-        setOpenModal(false);
-        setUpdate(false);
-      })
-      .catch((err) => console.log(err));
+  const viewBids = (project) => {
+    console.log(project);
+
+    navigate(`/project/${project.reference_no}/bids`, {
+      state: {
+        project,
+      },
+    });
   };
 
-  const columns = [
-    { key: "description", label: "Description" },
-    { key: "reference_no", label: "Code" },
-    { key: "location", label: "Location" },
-    { key: "status", label: "Status" },
-  ];
+  const handleInvite = (proj) => {
+    try {
+      const data = {
+        status: "invitation-to-bid",
+      };
+
+      alter("projects/invite", proj.id, data)
+        .then((res) => {
+          const result = res.data;
+          setProjects(
+            projects.map((project) => {
+              if (result.data.id == project.id) {
+                return result.data;
+              }
+
+              return project;
+            })
+          );
+
+          Alert.success("Updated!!", result.message);
+        })
+        .catch((err) => console.log(err.message));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // const handleDelete = (id) => {
+  //   destroy("projects", id)
+  //     .then((res) => {
+  //       setProjects(
+  //         projects.filter((project) => project.id !== res.data.data.id)
+  //       );
+  //       setState(initialState);
+  //       setOpenModal(false);
+  //       setUpdate(false);
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
 
   useEffect(() => {
-    collectAll("projects")
-      .then((res) => setProjects(res.data.data))
-      .catch((err) => console.log(err.message));
+    try {
+      collectAll("projects")
+        .then((res) => {
+          const result = res.data.data;
+          setProjects(
+            result.filter(
+              (project) =>
+                project && project.department_id == auth.department_id
+            )
+          );
+        })
+        .catch((err) => console.log(err.message));
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   useEffect(() => {
-    collectAll("serviceCategories")
-      .then((res) => setServiceCategories(res.data.data))
-      .catch((err) => console.log(err.message));
+    try {
+      const requiredDocumentsData = collectAll("companyDocuments");
+      const serviceCategoriesData = collectAll("serviceCategories");
+
+      batchRequests([requiredDocumentsData, serviceCategoriesData])
+        .then(
+          axios.spread((...res) => {
+            const requiredDocumentsCollection = res[0].data.data;
+            const serviceCategories = res[1].data.data;
+
+            const data = requiredDocumentsCollection.filter(
+              (doc) => doc.parentId == 0
+            );
+
+            setServiceCategories(serviceCategories);
+            setRequiredDocuments(
+              data.map((doc) => ({
+                value: doc.id,
+                label: doc.name,
+              }))
+            );
+          })
+        )
+        .catch((err) => console.log(err.message));
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   useEffect(() => {
@@ -163,6 +243,8 @@ const Projects = () => {
       });
     }
   }, [awardReq.approved_amount, awardReq.mobilization]);
+
+  console.log(projects);
 
   return (
     <>
@@ -342,6 +424,18 @@ const Projects = () => {
                         }
                       />
                     </div>
+                    <div className="col-md-12">
+                      <Select
+                        closeMenuOnSelect={false}
+                        components={animatedComponents}
+                        isMulti
+                        options={requiredDocuments}
+                        value={state.requiredDocuments}
+                        onChange={(e) =>
+                          setState({ ...state, requiredDocuments: e })
+                        }
+                      />
+                    </div>
                     <div className="col-md-12 mt-3">
                       <button type="submit" className={`btn btn-primary mt-4`}>
                         Submit
@@ -367,12 +461,26 @@ const Projects = () => {
       )}
 
       <div className="row">
-        <TableCard
-          columns={columns}
-          rows={projects}
-          handleEdit={handleUpdate}
-          handleDelete={handleDelete}
-        />
+        <div className="col-md-12">
+          <div className="card">
+            <div className="card-body">
+              <div className="row">
+                {projects.length > 0 &&
+                  projects.map((project) => (
+                    <div key={project.id} className="col-md-4 col-lg-6">
+                      <ProjectCard
+                        auth={auth}
+                        inviteToBid={handleInvite}
+                        manageproject={handleUpdate}
+                        project={project}
+                        viewBids={viewBids}
+                      />
+                    </div>
+                  ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );

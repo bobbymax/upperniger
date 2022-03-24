@@ -31,20 +31,8 @@ const AvatarCard = () => {
         </p>
         <ul>
           <li>
-            <span>
-              <span className="counter">19.8</span>k
-            </span>
-            <p>Follow</p>
-          </li>
-          <li>
             <span>2 year</span>
             <p>Experince</p>
-          </li>
-          <li>
-            <span>
-              <span className="counter">95.2</span>k
-            </span>
-            <p>Follower </p>
           </li>
         </ul>
       </div>

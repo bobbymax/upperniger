@@ -1,7 +1,15 @@
 import React from "react";
 
-const CustomCardBody = ({ children }) => {
-  return <div className="card-body">{children}</div>;
+const CustomCardBody = ({
+  children,
+  additionalClasses = "",
+  ...otherProps
+}) => {
+  return (
+    <div className={`card-body ${additionalClasses}`} {...otherProps}>
+      {children}
+    </div>
+  );
 };
 
 export default CustomCardBody;

@@ -12,6 +12,7 @@ import CustomCardBody from "../../components/theme/commons/cards/CustomCardBody"
 import TextInputField from "../../components/form/TextInputField";
 import CustomSelect from "../../components/form/CustomSelect";
 import CustomSelectOptions from "../../components/form/CustomSelectOptions";
+import { useNavigate } from "react-router-dom";
 
 const Company = () => {
   const initialState = {
@@ -30,7 +31,7 @@ const Company = () => {
     type: "vendor",
     category: "",
   };
-
+  const navigate = useNavigate();
   const columns = [
     { label: "Name", key: "name" },
     { label: "Email", key: "email" },
@@ -49,47 +50,35 @@ const Company = () => {
     setUpdate(false);
   };
 
-  const handleUpdate = (data) => {
-    setUpdate(true);
-    setOpenModal(true);
+  // const handleUpdate = (data) => {
+  //   setUpdate(true);
+  //   setOpenModal(true);
 
-    setState({
-      ...state,
-      id: data.id,
-      service_category_id: data.service_category_id,
-      registration_no: data.registration_no,
-      tin_no: data.tin_no,
-      name: data.name,
-      reference_no: data.reference_no,
-      email: data.email,
-      mobile: data.mobile,
-      type: data.type,
-      category: data.category,
+  //   setState({
+  //     ...state,
+  //     id: data.id,
+  //     service_category_id: data.service_category_id,
+  //     registration_no: data.registration_no,
+  //     tin_no: data.tin_no,
+  //     name: data.name,
+  //     reference_no: data.reference_no,
+  //     email: data.email,
+  //     mobile: data.mobile,
+  //     type: data.type,
+  //     category: data.category,
+  //   });
+  // };
+
+  const manageVendor = (vendor) => {
+    navigate(`/vendors/${vendor.reference_no}/manage`, {
+      state: {
+        vendor,
+      },
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // setBttnDisabled(true)
-
-    // const formData = new FormData()
-
-    // if (fileUpload !== {}) {
-    //     formData.append("file", fileUpload)
-    //     formData.append("upload_preset", "orbitapp")
-    // }
-
-    // upload(formData)
-    // .then(res => {
-    //     // console.log(res)
-    //     setState({
-    //         ...state,
-    //         profile: res.data.url,
-    //         reference_no: Math.floor(Math.random() * 10000000000)
-    //     })
-    // })
-    // .catch(err => console.log(err.message))
 
     const data = {
       id: 0,
@@ -379,7 +368,7 @@ const Company = () => {
         <TableCard
           columns={columns}
           rows={companies}
-          handleEdit={handleUpdate}
+          manageVendor={manageVendor}
         />
       </div>
     </>

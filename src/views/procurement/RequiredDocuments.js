@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import React, { useEffect, useState } from "react";
 import CustomSelect from "../../components/form/CustomSelect";
 import CustomSelectOptions from "../../components/form/CustomSelectOptions";
@@ -23,6 +24,9 @@ const RequiredDocuments = () => {
     value: "",
     pattern: "",
     score: 0,
+    parentId: 0,
+    necessity: "",
+    type: "",
   };
   const [state, setState] = useState(initialState);
   const [open, setOpen] = useState(false);
@@ -32,6 +36,11 @@ const RequiredDocuments = () => {
   const columns = [
     { key: "name", label: "Name" },
     { key: "pattern", label: "Pattern" },
+  ];
+
+  const selectOptions = [
+    { value: "required", label: "Required" },
+    { value: "optional", label: "Optional" },
   ];
 
   const handleUpdate = (data) => {
@@ -45,6 +54,9 @@ const RequiredDocuments = () => {
       value: data.value === null ? "" : data.value,
       pattern: data.pattern,
       score: data.score,
+      parentId: data.parentId,
+      necessity: data.necessity,
+      type: data.type,
     });
     setOpen(true);
   };
@@ -76,6 +88,9 @@ const RequiredDocuments = () => {
       value: state.value,
       pattern: state.pattern,
       score: state.score,
+      parentId: state.parentId,
+      necessity: state.necessity,
+      type: state.type,
     };
 
     if (update) {
@@ -127,7 +142,9 @@ const RequiredDocuments = () => {
           setDocuments(data);
         })
         .catch((err) => console.log(err.message));
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   const handleDrawer = () => {
@@ -197,6 +214,83 @@ const RequiredDocuments = () => {
                         placeholder="Please Enter Description"
                         multiline={4}
                       />
+                    </div>
+                    <div className="col-md-5">
+                      <CustomSelect
+                        label="Parent"
+                        value={state.parentId}
+                        onChange={(e) =>
+                          setState({
+                            ...state,
+                            parentId: parseInt(e.target.value),
+                          })
+                        }
+                      >
+                        <CustomSelectOptions value={-1} label="Select Parent" />
+                        <CustomSelectOptions value={0} label="None" />
+
+                        {documents.map(
+                          (doc) =>
+                            doc.parentId == 0 &&
+                            doc.pattern !== "sighting" && (
+                              <CustomSelectOptions
+                                key={doc.id}
+                                value={doc.id}
+                                label={doc.name}
+                              />
+                            )
+                        )}
+                      </CustomSelect>
+                    </div>
+                    <div className="col-md-3">
+                      <CustomSelect
+                        label="Type"
+                        value={state.type}
+                        onChange={(e) =>
+                          setState({
+                            ...state,
+                            type: e.target.value,
+                          })
+                        }
+                      >
+                        <CustomSelectOptions value="" label="Select Type" />
+
+                        {[
+                          { value: "fillable", label: "Fillable" },
+                          { value: "evaluated", label: "Evaluated" },
+                        ].map((opt, i) => (
+                          <CustomSelectOptions
+                            key={i}
+                            value={opt.value}
+                            label={opt.label}
+                          />
+                        ))}
+                      </CustomSelect>
+                    </div>
+                    <div className="col-md-4">
+                      <CustomSelect
+                        label="Necessity"
+                        value={state.necessity}
+                        onChange={(e) =>
+                          setState({
+                            ...state,
+                            necessity: e.target.value,
+                          })
+                        }
+                      >
+                        <CustomSelectOptions
+                          value=""
+                          label="Select Necessity"
+                        />
+
+                        {selectOptions.map((opt, i) => (
+                          <CustomSelectOptions
+                            key={i}
+                            value={opt.value}
+                            label={opt.label}
+                          />
+                        ))}
+                      </CustomSelect>
                     </div>
                     <div className="col-md-4">
                       <TextInputField
