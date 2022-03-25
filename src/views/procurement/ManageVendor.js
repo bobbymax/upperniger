@@ -8,7 +8,7 @@ import {
   batchRequests,
   collectAll,
 } from "../../utils/helpers/functions/controllers";
-import { useUser } from "../../utils/hooks/useUser";
+// import { useUser } from "../../utils/hooks/useUser";
 import moment from "moment";
 import * as Icon from "react-feather";
 import "./procurement.css";
@@ -16,11 +16,11 @@ import Alert from "../../utils/helpers/classes/Alert";
 
 const ManageVendor = () => {
   const location = useLocation();
-  const auth = useUser();
+  // const auth = useUser();
   const [vendor, setVendor] = useState({});
   const [documentations, setDocumentations] = useState([]);
   const [companyDocuments, setCompanyDocuments] = useState([]);
-  const [intersections, setIntersections] = useState([]);
+  // const [intersections, setIntersections] = useState([]);
 
   const handleAddressScore = (address) => {
     const score = address.type === "hq" ? 5 : 3;
@@ -104,7 +104,7 @@ const ManageVendor = () => {
 
               intersection.map((innt) => innt && arr.push(innt.id));
 
-              setIntersections(arr);
+              // setIntersections(arr);
 
               setCompanyDocuments(
                 companyDocumentsLoad.filter(
@@ -126,7 +126,7 @@ const ManageVendor = () => {
     }
   }, [vendor]);
 
-  console.log(vendor, companyDocuments);
+  console.log(vendor);
 
   return (
     <>
@@ -148,6 +148,17 @@ const ManageVendor = () => {
               <strong>Regisered:</strong>{" "}
               {moment(vendor.created_at).format("LL")}
             </p>
+
+            <ul className="list-group list-group-horizontal">
+              {vendor.team &&
+                vendor.team.length > 0 &&
+                vendor.team.map((user) => (
+                  <li
+                    key={user.id}
+                    className="list-group-item"
+                  >{`${user.firstname} ${user.surname}`}</li>
+                ))}
+            </ul>
           </div>
         </div>
 
@@ -203,7 +214,7 @@ const ManageVendor = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {documentations.length > 0 &&
+                  {documentations.length > 0 ? (
                     documentations.map((documentation) => (
                       <tr key={documentation.id}>
                         <td>{documentation.documentName}</td>
@@ -238,7 +249,14 @@ const ManageVendor = () => {
                           </button>
                         </td>
                       </tr>
-                    ))}
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={5} className="text-danger">
+                        No Document has been uploaded by this vendor
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>

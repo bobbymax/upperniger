@@ -244,7 +244,7 @@ const Projects = () => {
     }
   }, [awardReq.approved_amount, awardReq.mobilization]);
 
-  console.log(projects);
+  // console.log(projects);
 
   return (
     <>

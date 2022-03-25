@@ -1,7 +1,7 @@
 /* eslint-disable eqeqeq */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { alter, collectAll } from "../../utils/helpers/functions/controllers";
 import moment from "moment";
 import "./procurement.css";
@@ -13,7 +13,7 @@ import Alert from "../../utils/helpers/classes/Alert";
 
 const VendorCheck = () => {
   const location = useLocation();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const initialState = {
     project_id: 0,
@@ -28,7 +28,7 @@ const VendorCheck = () => {
 
   const [state, setState] = useState(initialState);
   const [bid, setBid] = useState({});
-  const [project, setProject] = useState({});
+  // const [project, setProject] = useState({});
   const [documentations, setDocumentations] = useState([]);
   const [open, setOpen] = useState(false);
 
@@ -99,7 +99,7 @@ const VendorCheck = () => {
       const project = location.state.project;
       const bid = location.state.bid;
 
-      setProject(project);
+      // setProject(project);
       setBid(bid);
       setState({
         ...state,
@@ -149,7 +149,6 @@ const VendorCheck = () => {
               type="button"
               className="btn btn-warning"
               onClick={handleOpen}
-              disabled={open || bid.invation !== ""}
             >
               INVITE TO BID
             </button>
